@@ -12,7 +12,9 @@
 
  Другими словами: функция должна возвращать в неизменном виде то, что поступает ей на вход
  */
-function returnFirstArgument() {}
+function returnFirstArgument(a) {
+  return a;
+}
 
 /*
  Задание 2:
@@ -28,7 +30,15 @@ function returnFirstArgument() {}
  Пример:
    sumWithDefaults(10) вернет 110
  */
-function sumWithDefaults() {}
+
+  //  2.1
+// function sumWithDefaults(a, b) {
+//   return a+b; 
+// }
+  // 2.2
+function sumWithDefaults(a) {
+  return a+100; 
+}
 
 /*
  Задание 3:
@@ -38,7 +48,9 @@ function sumWithDefaults() {}
  Пример:
    returnFnResult(() => 'привет') вернет 'привет'
  */
-function returnFnResult() {}
+function returnFnResult(returnFirstArgument, a) {
+  return returnFirstArgument(a);
+}
 
 /*
  Задание 4:
@@ -53,7 +65,23 @@ function returnFnResult() {}
    console.log(f()); // выведет 12
    console.log(f()); // выведет 13
  */
-function returnCounter() {}
+function returnCounter(a) {
+  function pluseOne () {
+    return ++a;
+  }
+  return pluseOne;
+} // возвращаемая функция должна увеличивать переданное число на единицу при каждом вызове
+
+// function returnCounter() {
+//   let n = 0;
+
+//   function inc() {
+//     n++;
+//     return n;
+//   }
+  
+//   return inc;
+// } //значение аргумента должно быть 0 по умолчанию
 
 /*
  Задание 5 *:
@@ -64,7 +92,9 @@ function returnCounter() {}
  Пример:
    returnArgumentsArray(1, 2, 3) вернет [1, 2, 3]
  */
-function returnArgumentsArray() {}
+function returnArgumentsArray(...numbers) {
+  return numbers
+}
 
 export {
   returnFirstArgument,
