@@ -44,8 +44,8 @@ function sumWithDefaults(a, b=100) {
  Пример:
    returnFnResult(() => 'привет') вернет 'привет'
  */
-function returnFnResult(returnFirstArgument, a) {
-  return returnFirstArgument(a);
+function returnFnResult(returnFirstArgument) {
+  return returnFirstArgument();
 }
 
 /*
@@ -66,7 +66,7 @@ function returnCounter(a=0) {
     return ++a;
   }
   return pluseOne;
-} // возвращаемая функция должна увеличивать переданное число на единицу при каждом вызове
+} 
 
 
 /*
