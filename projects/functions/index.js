@@ -31,14 +31,10 @@ function returnFirstArgument(a) {
    sumWithDefaults(10) вернет 110
  */
 
-  //  2.1
-// function sumWithDefaults(a, b) {
-//   return a+b; 
-// }
-  // 2.2
-function sumWithDefaults(a) {
-  return a+100; 
+function sumWithDefaults(a, b=100) {
+  return a+b; 
 }
+
 
 /*
  Задание 3:
@@ -65,23 +61,13 @@ function returnFnResult(returnFirstArgument, a) {
    console.log(f()); // выведет 12
    console.log(f()); // выведет 13
  */
-function returnCounter(a) {
+function returnCounter(a=0) {
   function pluseOne () {
     return ++a;
   }
   return pluseOne;
 } // возвращаемая функция должна увеличивать переданное число на единицу при каждом вызове
 
-// function returnCounter() {
-//   let n = 0;
-
-//   function inc() {
-//     n++;
-//     return n;
-//   }
-  
-//   return inc;
-// } //значение аргумента должно быть 0 по умолчанию
 
 /*
  Задание 5 *:
