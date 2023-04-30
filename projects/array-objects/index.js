@@ -1,5 +1,7 @@
 /* ДЗ 2 - работа с массивами и объектами */
 
+import { start } from "repl";
+
 /*
  Задание 1:
 
@@ -9,9 +11,13 @@
  Пример:
    forEach([1, 2, 3], (el) => console.log(el)); // выведет каждый элемент массива
  */
-function forEach() {}
+function forEach(array, fn) {
+  for (const [i, el] of array.entries()) {
+    fn(el, i, array);
+  }
+}
 
-/*
+/* 
  Задание 2:
 
  Напишите аналог встроенного метода map для работы с массивами.
@@ -21,7 +27,15 @@ function forEach() {}
    const newArray = map([1, 2, 3], (el) => el ** 2);
    console.log(newArray); // выведет [1, 4, 9]
  */
-function map() {}
+function map(array, fn) {
+  const newArray = [];
+
+  for (const [i, el] of array.entries()) {
+    newArray.push(fn(el, i, array));
+  }
+
+  return newArray;
+}
 
 /*
  Задание 3:
@@ -33,7 +47,21 @@ function map() {}
    const sum = reduce([1, 2, 3], (all, current) => all + current);
    console.log(sum); // выведет 6
  */
-function reduce() {}
+function reduce(array, fn, initial) {
+  let startIndex = 0;
+  let all = initial;
+
+  if (initial === undefined) {
+    startIndex = 1;
+    all = array[0];
+  }
+
+  for (let i = startIndex; i < array.length; i++) {
+    all = fn(all, array[i], i, array);
+  }
+
+  return all;
+}
 
 /*
  Задание 4:
@@ -44,6 +72,9 @@ function reduce() {}
    const keys = upperProps({ name: 'Сергей', lastName: 'Петров' });
    console.log(keys) // выведет ['NAME', 'LASTNAME']
  */
-function upperProps() {}
+function upperProps(obj) {
+  let a = Object.keys(obj).map(k => k.toUpperCase())
+  return a;
+}
 
 export { forEach, map, reduce, upperProps };
