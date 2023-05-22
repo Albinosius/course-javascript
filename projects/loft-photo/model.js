@@ -1,6 +1,3 @@
-import { rejects } from "assert";
-import { resolve } from "path";
-
 const APP_ID = 51645220;
 
 export default {
@@ -53,11 +50,14 @@ export default {
     });
   }, //возможность логиниться в ВК
 
-  // logout() {},
+  logout() {
+    return new Promise((resolve) => VK.Auth.revokeGrants(resolve));
+  },
 
   async init() {
     this.photoCach = {};
     this.friends = await this.getFriends();
+    [this.me] = await this.getUsers();
   }, //возможность получать список друзей
 
   getFriends() {
@@ -105,4 +105,16 @@ export default {
 
     return this.callApi('photos.getAll', params);
   },
+
+  getUsers(ids) {
+    const params = {
+      fielfs: ['photo_50', 'photo_100'],
+    };
+
+    if (ids) {
+      params.user_ids = ids;
+    }
+
+    return this.callApi('users.get', params);
+  }
 };
