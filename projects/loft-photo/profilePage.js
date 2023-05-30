@@ -6,8 +6,9 @@ export default {
   async setUser(user) {
     const photoComp = document.querySelector('.component-user-info-photo');
     const nameComp = document.querySelector('.component-user-info-name');
-    const photosComp = document.querySelector('.component-user-photo');
+    const photosComp = document.querySelector('.component-user-photos');
     const photos = await model.getPhotos(user.id);
+    // console.log(photos.items);
 
     this.user = user;
 
@@ -16,8 +17,8 @@ export default {
     photosComp.innerHTML = '';
 
     for (const photo of photos.items) {
-      const size = model.findeSize(photo);
-      const element = document.createElement('div');
+      const size = model.findSize(photo);
+      const element = document.createElement("div");
 
       element.classList.add('component-user-photo');
       element.dataset.id = photo.id;
@@ -33,8 +34,10 @@ export default {
         const friendsPhotos = await model.getPhotos(this.user.id);
         const photo = friendsPhotos.items.find((photo) => photo.id == photoId);
         const size = model.findSize(photo);
+        const photoStats = await model.photoStats(photoId);
 
-        mainPage.setFriendAndPhoto(this.user, parseInt(photoId), size.url);
+        mainPage.setFriendAndPhoto(this.user, parseInt(photoId), size.url, photoStats);
+
         pages.openPage('main');
       }
     });
@@ -45,7 +48,7 @@ export default {
 
     document.querySelector('.page-profile-exit').addEventListener('click', async() => {
       await model.logout();
-      pages.openPage('logein');
+      pages.openPage('login');
     });
   },
 };

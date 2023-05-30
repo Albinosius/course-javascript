@@ -33,7 +33,7 @@ const methods = {
 
     return {
       likes: photoLikes?.size ?? 0,
-      liked: photoLikes?.has(vkUser.id)?? false,
+      liked: photoLikes?.has(vkUser.id) ?? false,
       comments: photoComments?.lenght ?? 0,
     };
   },
@@ -53,7 +53,7 @@ const methods = {
     return DB.comments.get(photoId) ?? [];
   },
 };
-
+  
 http
   .createServer(async (req, res) => {
     console.log('➡️ Поступил запрос:', req.method, req.url);

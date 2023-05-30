@@ -1,6 +1,7 @@
 import model from './model';
 import profilePage from './profilePage';
 import pages from './pages';
+import commentsTemplate from './commentsTemplate.html.hbs';
 
 export default {
   async getNextPhoto() {
@@ -22,6 +23,7 @@ export default {
     headerNameComp.innerText = `${friend.first_name ?? ''} ${friend.last_name ?? ''}`;
     photoComp.style.backgroundImage = `url(${url})`;
     footerPhotoComp.style.backgroundImage = `url('${model.me.photo_50}')`;
+
     this.setLikes(stats.likes, stats.liked);
     this.setComments(stats.comments);
   },
@@ -42,27 +44,33 @@ export default {
       }
     });
 
-    document.querySelector('.component-header-profie-link').addEventListener('click', async() => {
+    document.querySelector('.component-photo').addEventListener('mouseup', async (e) => {
+      e.preventDefault();
+      await this.getNextPhoto();
+
+    });
+
+    document.querySelector('.component-header-profile-link').addEventListener('click', async () => {
       await profilePage.setUser(this.friend);
       pages.openPage('profile');
     });
 
-    document.querySelector('.component-footer-container-profile-link').addEventListener('click', async() => {
+    document.querySelector('.component-footer-container-profile-link').addEventListener('click', async () => {
       await profilePage.setUser(model.me);
       pages.openPage('profile');
     });
 
-    document.querySelector('.component-footer-container-social-likes').addEventListener('click', async() => {
-      const {likes, liked} = await model.like(this.photoId);
+    document.querySelector('.component-footer-container-social-likes').addEventListener('click', async () => {
+      const { likes, liked } = await model.like(this.photoId);
       this.setLikes(likes, liked);
     });
 
-    document.querySelector('.component-footer-container-social-comments').addEventListener('click', async() => {
+    document.querySelector('.component-footer-container-social-comments').addEventListener('click', async () => {
       document.querySelector('.component-comments').classList.remove('hidden');
       await this.loadComments(this.photoId);
     });
 
-    const input = document.querySelector('.components-containerfrom-input');
+    const input = document.querySelector('.component-comments-container-form-input');
 
     document.querySelector('.component-comments').addEventListener('click', (e) => {
       if (e.target === e.currentTarget) {
@@ -70,9 +78,9 @@ export default {
       }
     });
 
-    document.querySelector('.component-footer-container-form-send').addEventListener('click', async() => {
-      if (input.ariaValueMax.trim().length) {
-        await model.postComment(this.photoId, input.ariaValueMax.trim());
+    document.querySelector('.component-comments-container-form-send').addEventListener('click', async () => {
+      if (input.value.trim().length) {
+        await model.postComment(this.photoId, input.value.trim());
         input.value = '';
         await this.loadComments(this.photoId);
       }
@@ -84,7 +92,7 @@ export default {
     const commentsElement = commentsTemplate({
       list: comments.map((comment) => {
         return {
-          name: `${comment.user.first_name ?? ''} ${comment.user.last_name ??''}`,
+          name: `${comment.user.first_name ?? ''} ${comment.user.last_name ?? ''}`,
           photo: comment.user.photo_50,
           text: comment.text,
         };
@@ -92,7 +100,7 @@ export default {
     });
 
     document.querySelector('.component-comments-container-list').innerHTML = '';
-    document.querySelector('.component-comments-container-list').append(commentsElements);
+    document.querySelector('.component-comments-container-list').append(commentsElement);
     this.setComments(comments.length);
   },
 
@@ -111,9 +119,9 @@ export default {
   },
 
   setComments(total) {
-    const likesElement = document.querySelector(
+    const commentsElement = document.querySelector(
       '.component-footer-container-social-comments'
     );
-    likesElement.innerText = total;
+    commentsElement.innerText = total;
   },
 };

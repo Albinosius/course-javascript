@@ -1,27 +1,30 @@
+const PERM_FRIENDS = 2;
+const PERM_PHOTOS = 4;
 const APP_ID = 51645220;
 
 export default {
   getRandomElement(array) {
-    if (!array.lenght) {
+    if (!array.length) {
       return null;
     }
 
-    const ix = parseInt(Math.random() * (array.lenght - 1));
+    const ix = parseInt(Math.random() * (array.length - 1));
 
     return array[ix];
   },
 
   async getNextPhoto() {
-    const friend = this.getRandomElement(this.getFriendPhotos.items); //получаем рандомного друга +
-    const photos = await this.getFriendPhotos(friend.id); // список всех фотографий +
-    const photo = this.getRandomElement(photos.items); // из всех фотографий получаем рфндомную +
-    const size = this.findSize(photo); // фото подходящего размера +
+    const friend = this.getRandomElement(this.friends.items); 
+    const photos = await this.getFriendPhotos(friend.id); 
+    const photo = this.getRandomElement(photos.items);
+    const size = this.findSize(photo); 
+
 
     return { friend, id: photo.id, url: size.url };
   },
 
   findSize(photo) {
-    const size = photo.sizes.find((size) => size.width >= 360); //находим фото >= 360
+    const size = photo.sizes.find((size) => size.width >= 360); 
 
     if (!size) {
       return photo.sizes.reduce((biggest, current) => {
@@ -31,6 +34,8 @@ export default {
         return biggest;
       }, photo.sizes[0]);
     }
+
+    return size;
   }, // находим фото нужного размера
 
   login() {
@@ -56,10 +61,10 @@ export default {
   },
 
   async init() {
-    this.photoCach = {};
+    this.photoCache = {};
     this.friends = await this.getFriends();
     [this.me] = await this.getUsers();
-  }, //возможность получать список друзей
+  },
 
   getFriends() {
     const params = {
@@ -67,7 +72,7 @@ export default {
     };
 
     return this.callApi('friends.get', params);
-  }, // находим друга и его фото
+  }, 
 
   callApi(method, params) {
     params.v = params.v || '5.120';
@@ -84,7 +89,7 @@ export default {
   },
 
   async getFriendPhotos(id) {
-    const photos = this.photoCache[id];
+    let photos = this.photoCache[id];
 
     if (photos) {
       return photos;
@@ -95,7 +100,7 @@ export default {
     this.photoCache[id] = photos;
 
     return photos;
-  }, //возможность получать список фотографий друга + кэширование
+  },
 
   getPhotos(owner) {
     const params = {
@@ -128,7 +133,7 @@ export default {
         all.push(`${name}=${encodeURIComponent(value)}`);
         return all;
       }, [])
-      .join('$');
+      .join('&');
 
     const params = {
       headers: {
@@ -142,7 +147,7 @@ export default {
     }
 
     const response = await fetch(`/loft-photo/api/?${query}`, params);
-
+    
     return response.json();
   },
 
@@ -156,9 +161,10 @@ export default {
 
   async getComments(photo) {
     return this.callServer('getComments', {photo});
+    
   },
 
   async postComment(photo, text) {
-    return this.callServer('postComment', {photo});
+    return this.callServer('postComment', {photo}, {text});
   },
 };
